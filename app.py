@@ -561,27 +561,6 @@ def reset_input(default_value, key):
         st.session_state[key] = current_value
     return current_value
 
-def initialize_firebase():
-    global FIREBASE_COLLECTION_NAME
-    FIREBASE_KEY_JSON = os.getenv('FIREBASE_KEY')
-    FIREBASE_COLLECTION_NAME = os.getenv('FIREBASE_COLLECTION_NAME')
-    
-    if FIREBASE_KEY_JSON is None:
-        raise ValueError("FIREBASE_KEY environment variable not set.")
-
-    try:
-        firebase_credentials = json.loads(FIREBASE_KEY_JSON)
-
-        if not firebase_admin._apps:
-            cred = credentials.Certificate(firebase_credentials)
-            firebase_admin.initialize_app(cred)
-
-        return firestore.client()
-    except Exception as e:
-        raise Exception(f"Error initializing Firebase: {e}")
-
-db = initialize_firebase()
-
 def update_ett_size():
     selected_age = st.session_state.age_select
     st.session_state.ett_size = age_to_ett_mapping.get(selected_age, '')
@@ -1673,6 +1652,26 @@ if st.session_state.section == 5:
                 st.warning("Please select an option.")
 
 
+if 'firebase_initialized' not in st.session_state:
+    firebase_key = st.secrets["FIREBASE_KEY"]
+    cred = credentials.Certificate(json.loads(firebase_key))
+    
+    try:
+        firebase_admin.initialize_app(cred)
+        st.session_state.firebase_initialized = True
+    except ValueError as e:
+        if "already exists" in str(e):
+            pass  # App is already initialized
+        else:
+            st.error(f"Failed to initialize Firebase: {str(e)}")
+
+# Access Firestore
+if 'db' not in st.session_state:
+    try:
+        st.session_state.db = firestore.client()
+    except Exception as e:
+        st.error(f"Failed to connect to Firestore: {str(e)}")
+      
 elif st.session_state.section == 6:
     st.title("Download ABC Form")
     

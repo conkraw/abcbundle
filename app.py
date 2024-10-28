@@ -1733,7 +1733,7 @@ elif st.session_state.section == 6:
                     "date": st.session_state.formatted_date,
                     "room_number": st.session_state.room_number,
                 }
-                db.collection("N4KFORMW").add(data_to_upload)
+                db.collection("N4KFORMP").add(data_to_upload)
                 st.success("Form submitted successfully!")
 
                 # Allow the user to download the created document

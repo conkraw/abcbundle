@@ -1,0 +1,44 @@
+:
+Premature: 5 Liters Per Minute
+Newborn: 5 Liters Per Minute
+1 month old: 5 Liters Per Minute
+2 month old: 5 Liters Per Minute
+3 month old: 5 Liters Per Minute
+4 month old: 5 Liters Per Minute
+5 month old: 5 Liters Per Minute
+6 month old: 5 Liters Per Minute
+7 month old: 5 Liters Per Minute
+8 month old: 5 Liters Per Minute
+9 month old: 5 Liters Per Minute
+10 month old: 5 Liters Per Minute
+11 month old: 5 Liters Per Minute
+1 year old: 5 Liters Per Minute
+2 year old: 10 Liters Per Minute
+3 year old: 10 Liters Per Minute
+4 year old: 10 Liters Per Minute
+5 year old: 10 Liters Per Minute
+6 year old: 10 Liters Per Minute
+7 year old: 10 Liters Per Minute
+8 year old: 15 Liters Per Minute
+9 year old: 15 Liters Per Minute
+10 year old: 15 Liters Per Minute
+11 year old: 15 Liters Per Minute
+12 year old: 15 Liters Per Minute
+13 year old: 15 Liters Per Minute
+14 year old: 15 Liters Per Minute
+15 year old: 15 Liters Per Minute
+16 year old: 15 Liters Per Minute
+17 year old: 15 Liters Per Minute
+18 year old: 15 Liters Per Minute
+19 year old: 15 Liters Per Minute
+20 year old: 15 Liters Per Minute
+21 year old: 15 Liters Per Minute
+22 year old: 15 Liters Per Minute
+23 year old: 15 Liters Per Minute
+24 year old: 15 Liters Per Minute
+25 year old: 15 Liters Per Minute
+26 year old: 15 Liters Per Minute
+27 year old: 15 Liters Per Minute
+28 year old: 15 Liters Per Minute
+29 year old: 15 Liters Per Minute
+30 year old: 15 Liters Per Minute

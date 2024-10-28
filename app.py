@@ -3,13 +3,13 @@ from docx import Document
 from io import BytesIO
 from datetime import datetime
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import credentials, firestore, messaging
 import os
 import json
 from datetime import datetime
 import io
 import pytz 
-
+  
 # Define mappings for ETT size, Blade type, and Apneic Oxygenation based on patient age
 age_to_ett_mapping = {'': '', 
                       '0 months': '3.5 mm',
@@ -1665,7 +1665,7 @@ if 'firebase_initialized' not in st.session_state:
         else:
             st.error(f"Failed to initialize Firebase: {str(e)}")
 
-# Access Firestore
+#Access Firestore
 if 'db' not in st.session_state:
     try:
         st.session_state.db = firestore.client()
@@ -1755,3 +1755,4 @@ elif st.session_state.section == 6:
     with col1:
         if st.button("Previous", on_click=prev_section):
             pass
+

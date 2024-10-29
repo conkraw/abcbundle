@@ -1688,11 +1688,11 @@ if st.session_state.section == 6:
       print("Available methods:", dir(mailjet))
       
       # This should fail if send is not callable
-      try:
-          result = mailjet.send(data={"Messages": [{"From": {"Email": "sender@example.com"}, "To": [{"Email": "ckrawiec@pennstatehealth.psu.edu"}], "Subject": "Test", "TextPart": "Hello!"}]})
-          print(result.json())
-      except Exception as e:
-          print(f"Error: {e}")
+      #try:
+      #    result = mailjet.send(data={"Messages": [{"From": {"Email": "sender@example.com"}, "To": [{"Email": "ckrawiec@pennstatehealth.psu.edu"}], "Subject": "Test", "TextPart": "Hello!"}]})
+      #    print(result.json())
+      #except Exception as e:
+      #    print(f"Error: {e}")
 
 
     col1, col2, col3 = st.columns(3)

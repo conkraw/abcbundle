@@ -31,7 +31,7 @@ if st.session_state.section == 6:
     st.title("Download ABC Form")
     
     # Input fields for email data
-    to_email = st.text_input("conkraw@gmail.com")
+    to_email = st.text_input("Email")
     subject = st.text_input("Email Subject")
     message = st.text_area("Email Message")
     

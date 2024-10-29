@@ -1681,9 +1681,10 @@ mailjet = Client(auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["
 
 if st.session_state.section == 6:
     st.title("Download ABC Form")
+    
     col1, col2, col3 = st.columns(3)
 
-    with col3:
+    with col3: 
         if st.button("Submit"):
             # Prepare data for the Word document
             document_data = {
@@ -1724,8 +1725,9 @@ if st.session_state.section == 6:
                 'advance_airway_provider': st.session_state.advance_airway_provider,
                 'advance_airway_procedure': st.session_state.advance_airway_procedure
             }
-            template_path = 'airway_bundlez.docx'  # Ensure this is the correct path
 
+            template_path = 'airway_bundlez.docx'  # Ensure this is the correct path
+            
             try:
                 # Create the Word document
                 doc_file = create_word_doc(template_path, document_data)
@@ -1749,54 +1751,14 @@ if st.session_state.section == 6:
                         file_name=doc_file.split("/")[-1],
                         mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
                     )
+                
+                os.remove(doc_file)  # Clean up the file after download
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
+                st.exception(e)  # Print the stack trace for debugging
 
-                # Send the email with the document attached
-                with open(doc_file, 'rb') as f:
-                  attachment_content = f.read()
-            
-                email_data = {
-                    'Messages': [
-                        {
-                            'From': {
-                                'Email': 'your_email@example.com',  # Replace with your verified sender email
-                                'Name': 'Your Name'
-                            },
-                            'To': [
-                                {
-                                    'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Replace with recipient's email
-                                    'Name': 'Recipient Name'
-                                }
-                            ],
-                            'Subject': 'ABC Form Submission',
-                            'TextPart': 'Please find the attached ABC Form document.',
-                            'Attachments': [
-                                {
-                                    'ContentType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                                    'Filename': 'your_document.docx',  # Use the actual filename
-                                    'Base64Content': base64.b64encode(attachment_content).decode('utf-8')
-                                }
-                            ]
-                        }
-                    ]
-                }
-                
-                # Send the email
-                try:
-                    response = requests.post(
-                        'https://api.mailjet.com/v3/send',
-                        auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]),
-                        json=email_data
-                    )
-                
-                    # Debugging information
-                    print("Response Status Code:", response.status_code)
-                    print("Response Text:", response.text)  # Log the raw response text
-                
-                    if response.status_code == 200:
-                        st.success("Email sent successfully!")
-                    else:
-                        st.error(f"Failed to send email: {response.status_code} - {response.text}")
-                
-                except Exception as e:
-                    st.error(f"An error occurred while sending the email: {e}")
-                    st.exception(e)  # Print the stack trace for debugging
+            st.rerun()  # Rerun the app to refresh the state
+
+    with col1:
+        if st.button("Previous", on_click=prev_section):
+            pass

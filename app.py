@@ -1680,18 +1680,19 @@ if 'db' not in st.session_state:
 
 if st.session_state.section == 6:
     st.title("Download ABC Form")
-  
-    mailjet = Client(auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]), version='v3.1')
-    
-    # Check if send method exists
-    print("Available methods:", dir(mailjet))
-    
-    # This should fail if send is not callable
-    try:
-        result = mailjet.send(data={"Messages": [{"From": {"Email": "sender@example.com"}, "To": [{"Email": "ckrawiec@pennstatehealth.psu.edu"}], "Subject": "Test", "TextPart": "Hello!"}]})
-        print(result.json())
-    except Exception as e:
-        print(f"Error: {e}")
+
+    if st.button("TESTEMAIL"):
+      mailjet = Client(auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]), version='v3.1')
+      
+      # Check if send method exists
+      print("Available methods:", dir(mailjet))
+      
+      # This should fail if send is not callable
+      try:
+          result = mailjet.send(data={"Messages": [{"From": {"Email": "sender@example.com"}, "To": [{"Email": "ckrawiec@pennstatehealth.psu.edu"}], "Subject": "Test", "TextPart": "Hello!"}]})
+          print(result.json())
+      except Exception as e:
+          print(f"Error: {e}")
 
 
     col1, col2, col3 = st.columns(3)

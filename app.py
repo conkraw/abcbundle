@@ -1672,6 +1672,15 @@ if 'db' not in st.session_state:
     except Exception as e:
         st.error(f"Failed to connect to Firestore: {str(e)}")
 
+
+import os
+from mailjet_rest import Client
+
+# Initialize Mailjet client
+API_KEY = 'your_mailjet_api_key'
+API_SECRET = 'your_mailjet_api_secret'
+mailjet = Client(auth=(API_KEY, API_SECRET), version='v3.1')
+
 elif st.session_state.section == 6:
     st.title("Download ABC Form")
     

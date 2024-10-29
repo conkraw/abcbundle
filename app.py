@@ -1780,7 +1780,7 @@ if st.session_state.section == 6:
                 }
 
                 # Debugging: Check the email_data structure before sending
-                st.write("Email data prepared for sending:", email_data)
+                #st.write("Email data prepared for sending:", email_data)
 
                 # Check if the send method is callable
                 if hasattr(mailjet, 'send') and callable(mailjet.send):

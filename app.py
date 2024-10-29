@@ -1727,8 +1727,7 @@ if st.session_state.section == 6:
                 'advance_airway_provider': st.session_state.advance_airway_provider,
                 'advance_airway_procedure': st.session_state.advance_airway_procedure
             }
-
-          template_path = 'airway_bundlez.docx'  # Ensure this is the correct path
+            template_path = 'airway_bundlez.docx'  # Ensure this is the correct path
             
             try:
                 # Create the Word document

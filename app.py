@@ -1689,7 +1689,7 @@ if st.session_state.section == 6:
     with col3: 
         if st.button("Submit"):
             # Prepare data for the Word document
-                document_data = {
+            document_data = {
                 'date': st.session_state.formatted_date,
                 'time': st.session_state.formatted_time,
                 'option': st.session_state.option,

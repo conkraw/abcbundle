@@ -12,6 +12,7 @@ import pytz
 import os
 from mailjet_rest import Client
 import base64
+import requests
 
 # Define mappings for ETT size, Blade type, and Apneic Oxygenation based on patient age
 age_to_ett_mapping = {'': '', 
@@ -1757,12 +1758,12 @@ if st.session_state.section == 6:
                     'Messages': [
                         {
                             'From': {
-                                'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Replace with your verified sender email
+                                'Email': 'your_email@example.com',
                                 'Name': 'Your Name'
                             },
                             'To': [
                                 {
-                                    'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Replace with recipient's email
+                                    'Email': 'recipient_email@example.com',
                                     'Name': 'Recipient Name'
                                 }
                             ],
@@ -1771,28 +1772,25 @@ if st.session_state.section == 6:
                             'Attachments': [
                                 {
                                     'ContentType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                                    'Filename': doc_file.split("/")[-1],
+                                    'Filename': 'your_document.docx',
                                     'Base64Content': base64.b64encode(attachment_content).decode('utf-8')
                                 }
                             ]
                         }
                     ]
                 }
-
-                # Debugging: Check the email_data structure before sending
-                #st.write("Email data prepared for sending:", email_data)
-
-                # Check if the send method is callable
-                if hasattr(mailjet, 'send') and callable(mailjet.send):
-                    result = mailjet.send(data=email_data)
-                    st.write("Mailjet send result:", result)  # Inspect the result object
-
-                    if result.status_code == 200:
-                        st.success("Email sent successfully!")
-                    else:
-                        st.error("Failed to send email: " + str(result.json()))
+                
+                response = requests.post(
+                    'https://api.mailjet.com/v3/send',
+                    auth=('your_api_key', 'your_api_secret'),
+                    json=email_data
+                )
+                
+                if response.status_code == 200:
+                    print("Email sent successfully!")
                 else:
-                    st.error("Mailjet send method is not callable.")
+                    print("Failed to send email:", response.json())
+
 
             except Exception as e:
                 st.error(f"An error occurred: {e}")

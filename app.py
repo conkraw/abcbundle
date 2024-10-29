@@ -1688,7 +1688,7 @@ if st.session_state.section == 6:
     
     # This should fail if send is not callable
     try:
-        result = mailjet.send(data={"Messages": [{"From": {"Email": "sender@example.com"}, "To": [{"Email": "recipient@example.com"}], "Subject": "Test", "TextPart": "Hello!"}]}})
+        result = mailjet.send(data={"Messages": [{"From": {"Email": "sender@example.com"}, "To": [{"Email": "recipient@example.com"}], "Subject": "Test", "TextPart": "Hello!"}]})
         print(result.json())
     except Exception as e:
         print(f"Error: {e}")

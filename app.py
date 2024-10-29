@@ -1679,10 +1679,17 @@ if 'db' not in st.session_state:
 # Initialize Mailjet client
 mailjet = Client(auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]), version='v3.1')
 
+# Initialize Mailjet client
+mailjet = Client(auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]), version='v3.1')
+
 if st.session_state.section == 6:
     st.title("Download ABC Form")
     
     col1, col2, col3 = st.columns(3)
+
+    # Initialize session state variables
+    if 'doc_file' not in st.session_state:
+        st.session_state.doc_file = None
 
     with col3: 
         if st.button("Submit"):
@@ -1730,7 +1737,7 @@ if st.session_state.section == 6:
             
             try:
                 # Create the Word document
-                doc_file = create_word_doc(template_path, document_data)
+                st.session_state.doc_file = create_word_doc(template_path, document_data)
                 st.success("Document created successfully!")
 
                 # Upload data to Firebase
@@ -1743,21 +1750,19 @@ if st.session_state.section == 6:
                 db.collection("N4KFORMP").add(data_to_upload)
                 st.success("Form submitted successfully!")
 
-                # Allow the user to download the created document
-                with open(doc_file, 'rb') as f:
-                    st.download_button(
-                        label="Download Word Document",
-                        data=f,
-                        file_name=doc_file.split("/")[-1],
-                        mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-                    )
-                
-                #os.remove(doc_file)  # Clean up the file after download
             except Exception as e:
                 st.error(f"An error occurred: {e}")
                 st.exception(e)  # Print the stack trace for debugging
 
-            st.rerun()  # Rerun the app to refresh the state
+        # Show the download button if the document has been created
+        if st.session_state.doc_file:
+            with open(st.session_state.doc_file, 'rb') as f:
+                st.download_button(
+                    label="Download Word Document",
+                    data=f,
+                    file_name=st.session_state.doc_file.split("/")[-1],
+                    mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                )
 
     with col1:
         if st.button("Previous", on_click=prev_section):

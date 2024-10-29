@@ -1730,72 +1730,72 @@ if st.session_state.section == 6:
 
             template_path = 'airway_bundlez.docx'  # Ensure this is the correct path
             
-            try:
-                # Create the Word document
-                doc_file = create_word_doc(template_path, document_data)
-                st.success("Document created successfully!")
-
-                # Upload data to Firebase
-                db = st.session_state.db  # Access the Firestore client from session state
-                data_to_upload = {
-                    "form_completed_by": st.session_state.completed_by,
-                    "date": st.session_state.formatted_date,
-                    "room_number": st.session_state.room_number,
-                }
-                db.collection("N4KFORMP").add(data_to_upload)
-                st.success("Form submitted successfully!")
-
-                # Allow the user to download the created document
-                with open(doc_file, 'rb') as f:
-                    st.download_button(
-                        label="Download Word Document",
-                        data=f,
-                        file_name=doc_file.split("/")[-1],
-                        mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-                    )
-
-                # Send the email with the document attached
-                with open(doc_file, 'rb') as f:
-                    email_data = {
-                        'Messages': [
-                            {
-                                'From': {
-                                    'Email': 'your_email@example.com',  # Replace with your verified sender email
-                                    'Name': 'Your Name'
-                                },
-                                'To': [
-                                    {
-                                        'Email': 'recipient_email@example.com',  # Replace with recipient's email
-                                        'Name': 'Recipient Name'
-                                    }
-                                ],
-                                'Subject': 'ABC Form Submission',
-                                'TextPart': 'Please find the attached ABC Form document.',
-                                'Attachments': [
-                                    {
-                                        'ContentType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                                        'Filename': doc_file.split("/")[-1],
-                                        'Base64Content': base64.b64encode(f.read()).decode('utf-8')  # Encode file to Base64
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-
-                    result = mailjet.send(data=email_data)
-                    if result.status_code == 200:
-                        st.success("Email sent successfully!")
-                    else:
-                        st.error("Failed to send email: " + str(result.json()))
-
-                # Optionally, remove the document after download is initiated
-                # os.remove(doc_file)  # Uncomment if you want to delete after download
-            except Exception as e:
-                st.error(f"An error occurred: {e}")
-                st.exception(e)  # Print the stack trace for debugging
-
-    with col1:
-        if st.button("Previous", on_click=prev_section):
-            pass
-
+              try:
+                  # Create the Word document
+                  doc_file = create_word_doc(template_path, document_data)
+                  st.success("Document created successfully!")
+  
+                  # Upload data to Firebase
+                  db = st.session_state.db  # Access the Firestore client from session state
+                  data_to_upload = {
+                      "form_completed_by": st.session_state.completed_by,
+                      "date": st.session_state.formatted_date,
+                      "room_number": st.session_state.room_number,
+                  }
+                  db.collection("N4KFORMP").add(data_to_upload)
+                  st.success("Form submitted successfully!")
+  
+                  # Allow the user to download the created document
+                  with open(doc_file, 'rb') as f:
+                      st.download_button(
+                          label="Download Word Document",
+                          data=f,
+                          file_name=doc_file.split("/")[-1],
+                          mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                      )
+  
+                  # Send the email with the document attached
+                  with open(doc_file, 'rb') as f:
+                      email_data = {
+                          'Messages': [
+                              {
+                                  'From': {
+                                      'Email': 'your_email@example.com',  # Replace with your verified sender email
+                                      'Name': 'Your Name'
+                                  },
+                                  'To': [
+                                      {
+                                          'Email': 'recipient_email@example.com',  # Replace with recipient's email
+                                          'Name': 'Recipient Name'
+                                      }
+                                  ],
+                                  'Subject': 'ABC Form Submission',
+                                  'TextPart': 'Please find the attached ABC Form document.',
+                                  'Attachments': [
+                                      {
+                                          'ContentType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                          'Filename': doc_file.split("/")[-1],
+                                          'Base64Content': base64.b64encode(f.read()).decode('utf-8')  # Encode file to Base64
+                                      }
+                                  ]
+                              }
+                          ]
+                      }
+  
+                      result = mailjet.send(data=email_data)
+                      if result.status_code == 200:
+                          st.success("Email sent successfully!")
+                      else:
+                          st.error("Failed to send email: " + str(result.json()))
+  
+                  # Optionally, remove the document after download is initiated
+                  # os.remove(doc_file)  # Uncomment if you want to delete after download
+              except Exception as e:
+                  st.error(f"An error occurred: {e}")
+                  st.exception(e)  # Print the stack trace for debugging
+  
+      with col1:
+          if st.button("Previous", on_click=prev_section):
+              pass
+  
 

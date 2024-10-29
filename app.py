@@ -1689,6 +1689,7 @@ mailjet = Client(auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["
 
 if st.session_state.section == 6:
     st.title("Download ABC Form")
+    st.write("Mailjet API Key:", st.secrets["mailjet"]["api_key"])
 
     col1, col2, col3 = st.columns(3)
 

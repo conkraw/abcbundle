@@ -1759,12 +1759,12 @@ if st.session_state.section == 6:
                         'Messages': [
                             {
                                 'From': {
-                                    'Email': 'your_email@example.com',  # Replace with your verified sender email
+                                    'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Replace with your verified sender email
                                     'Name': 'Your Name'
                                 },
                                 'To': [
                                     {
-                                        'Email': 'recipient_email@example.com',  # Replace with recipient's email
+                                        'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Replace with recipient's email
                                         'Name': 'Recipient Name'
                                     }
                                 ],

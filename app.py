@@ -1680,13 +1680,12 @@ if 'db' not in st.session_state:
 # Initialize Mailjet client
 mailjet = Client(auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]), version='v3.1')
 
-
 if st.session_state.section == 6:
     st.title("Download ABC Form")
-    
+
     col1, col2, col3 = st.columns(3)
 
-    with col3: 
+    with col3:
         if st.button("Submit"):
             # Prepare data for the Word document
             document_data = {
@@ -1728,7 +1727,7 @@ if st.session_state.section == 6:
                 'advance_airway_procedure': st.session_state.advance_airway_procedure
             }
             template_path = 'airway_bundlez.docx'  # Ensure this is the correct path
-            
+
             try:
                 # Create the Word document
                 doc_file = create_word_doc(template_path, document_data)
@@ -1755,37 +1754,39 @@ if st.session_state.section == 6:
 
                 # Send the email with the document attached
                 with open(doc_file, 'rb') as f:
-                    email_data = {
-                        'Messages': [
-                            {
-                                'From': {
-                                    'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Replace with your verified sender email
-                                    'Name': 'Your Name'
-                                },
-                                'To': [
-                                    {
-                                        'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Replace with recipient's email
-                                        'Name': 'Recipient Name'
-                                    }
-                                ],
-                                'Subject': 'ABC Form Submission',
-                                'TextPart': 'Please find the attached ABC Form document.',
-                                'Attachments': [
-                                    {
-                                        'ContentType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                                        'Filename': doc_file.split("/")[-1],
-                                        'Base64Content': base64.b64encode(f.read()).decode('utf-8')  # Encode file to Base64
-                                    }
-                                ]
-                            }
-                        ]
-                    }
+                    attachment_content = f.read()
 
-                    result = mailjet.send(data=email_data)
-                    if result.status_code == 200:
-                        st.success("Email sent successfully!")
-                    else:
-                        st.error("Failed to send email: " + str(result.json()))
+                email_data = {
+                    'Messages': [
+                        {
+                            'From': {
+                                'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Replace with your verified sender email
+                                'Name': 'Your Name'
+                            },
+                            'To': [
+                                {
+                                    'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Replace with recipient's email
+                                    'Name': 'Recipient Name'
+                                }
+                            ],
+                            'Subject': 'ABC Form Submission',
+                            'TextPart': 'Please find the attached ABC Form document.',
+                            'Attachments': [
+                                {
+                                    'ContentType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                    'Filename': doc_file.split("/")[-1],
+                                    'Base64Content': base64.b64encode(attachment_content).decode('utf-8')
+                                }
+                            ]
+                        }
+                    ]
+                }
+
+                result = mailjet.send(data=email_data)
+                if result.status_code == 200:
+                    st.success("Email sent successfully!")
+                else:
+                    st.error("Failed to send email: " + str(result.json()))
 
                 # Optionally, remove the document after download is initiated
                 # os.remove(doc_file)  # Uncomment if you want to delete after download
@@ -1796,3 +1797,4 @@ if st.session_state.section == 6:
     with col1:
         if st.button("Previous", on_click=prev_section):
             pass
+

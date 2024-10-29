@@ -1753,12 +1753,14 @@ if st.session_state.section == 6:
                         mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
                     )
                 
-                os.remove(doc_file)  # Clean up the file after download
+                # Optionally, remove the document after download is initiated
+                # os.remove(doc_file)  # Uncomment if you want to delete after download
             except Exception as e:
                 st.error(f"An error occurred: {e}")
                 st.exception(e)  # Print the stack trace for debugging
 
-            st.rerun()  # Rerun the app to refresh the state
+            # No rerun here, so user can see the download button
+            # Instead of rerunning, you might just want to show a message or reset the state some other way.
 
     with col1:
         if st.button("Previous", on_click=prev_section):

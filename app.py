@@ -1680,7 +1680,7 @@ from mailjet_rest import Client
 mailjet = Client(auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]), version='v3.1')
 
 
-elif st.session_state.section == 6:
+if st.session_state.section == 6:
     st.title("Download ABC Form")
     
     col1, col2, col3 = st.columns(3)

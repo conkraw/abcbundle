@@ -1685,7 +1685,7 @@ if st.session_state.section == 6:
       mailjet = Client(auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]), version='v3.1')
       
       # Check if send method exists
-      print("Available methods:", dir(mailjet))
+      st.write("Available methods:", dir(mailjet))
       
       # This should fail if send is not callable
       #try:

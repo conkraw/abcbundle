@@ -1689,8 +1689,43 @@ if st.session_state.section == 6:
     with col3: 
         if st.button("Submit"):
             # Prepare data for the Word document
-            document_data = {
-                # Your existing data preparation...
+                document_data = {
+                'date': st.session_state.formatted_date,
+                'time': st.session_state.formatted_time,
+                'option': st.session_state.option,
+                'completed_by': st.session_state.completed_by,
+                'room_number': st.session_state.room_number,
+                'difficult_airway_history': st.session_state.difficult_airway_history,
+                'physical_risk': st.session_state.physical_risk,
+                'high_risk_desaturation': st.session_state.high_risk_desaturation,
+                'high_risk_ICP': st.session_state.high_risk_ICP,
+                'unstable_hemodynamics': st.session_state.unstable_hemodynamics,
+                'other_risk_yes_no': st.session_state.other_risk_yes_no,
+                'other_risk_text_input': st.session_state.other_risk_text_input,
+                'who_will_intubate': st.session_state.who_will_intubate,
+                'who_will_bvm': st.session_state.who_will_bvm,
+                'intubation_method': st.session_state.intubation_method,
+                'ett_size': st.session_state.ett_size,
+                'ett_type': st.session_state.ett_type,
+                'lma_details': st.session_state.lma_details,
+                'glide_details': st.session_state.glide_details,
+                'other_device_details': st.session_state.other_device_details,
+                'mac_details': st.session_state.mac_details,
+                'miller_details': st.session_state.miller_details,
+                'wis_hipple_details': st.session_state.wis_hipple_details,
+                'atropine_dose': st.session_state.atropine_dose,
+                'glycopyrrolate_dose': st.session_state.glycopyrrolate_dose,
+                'fentanyl_dose': st.session_state.fentanyl_dose,
+                'midazolam_dose': st.session_state.midazolam_dose,
+                'ketamine_dose': st.session_state.ketamine_dose,
+                'propofol_dose': st.session_state.propofol_dose,
+                'roc_dose': st.session_state.roc_dose,
+                'vec_dose': st.session_state.vec_dose,
+                'ao_details': st.session_state.ao_details,
+                'other_planning': st.session_state.other_planning,
+                'when_intubate': st.session_state.when_intubate,
+                'advance_airway_provider': st.session_state.advance_airway_provider,
+                'advance_airway_procedure': st.session_state.advance_airway_procedure
             }
 
             template_path = 'airway_bundlez.docx'  # Ensure this is the correct path
@@ -1725,12 +1760,12 @@ if st.session_state.section == 6:
                         'Messages': [
                             {
                                 'From': {
-                                    'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Replace with your verified sender email
+                                    'Email': 'your_email@example.com',  # Replace with your verified sender email
                                     'Name': 'Your Name'
                                 },
                                 'To': [
                                     {
-                                        'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Replace with recipient's email
+                                        'Email': 'recipient_email@example.com',  # Replace with recipient's email
                                         'Name': 'Recipient Name'
                                     }
                                 ],

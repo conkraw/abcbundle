@@ -1677,9 +1677,8 @@ import os
 from mailjet_rest import Client
 
 # Initialize Mailjet client
-API_KEY = 'your_mailjet_api_key'
-API_SECRET = 'your_mailjet_api_secret'
-mailjet = Client(auth=(API_KEY, API_SECRET), version='v3.1')
+mailjet = Client(auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]), version='v3.1')
+
 
 elif st.session_state.section == 6:
     st.title("Download ABC Form")
@@ -1754,6 +1753,40 @@ elif st.session_state.section == 6:
                         mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
                     )
                 
+                # Send the document via email
+                with open(doc_file, 'rb') as f:
+                    email_data = {
+                        'Messages': [
+                            {
+                                'From': {
+                                    'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Your verified sender email
+                                    'Name': 'Your Name'
+                                },
+                                'To': [
+                                    {
+                                        'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Recipient's email
+                                        'Name': ''
+                                    }
+                                ],
+                                'Subject': 'ABC Form Submission',
+                                'TextPart': 'Please find the attached ABC Form document.',
+                                'Attachments': [
+                                    {
+                                        'ContentType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                        'Filename': doc_file.split("/")[-1],
+                                        'Base64Content': f.read().encode('base64').decode('utf-8')
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+
+                    result = mailjet.send(data=email_data)
+                    if result.status_code == 200:
+                        st.success("Email sent successfully!")
+                    else:
+                        st.error("Failed to send email: " + str(result.json()))
+
                 os.remove(doc_file)  # Clean up the file after download
             except Exception as e:
                 st.error(f"An error occurred: {e}")
@@ -1764,4 +1797,3 @@ elif st.session_state.section == 6:
     with col1:
         if st.button("Previous", on_click=prev_section):
             pass
-

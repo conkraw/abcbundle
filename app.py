@@ -1758,12 +1758,12 @@ if st.session_state.section == 6:
                     'Messages': [
                         {
                             'From': {
-                                'Email': 'your_email@example.com',
+                                'Email': 'your_email@example.com',  # Replace with your verified sender email
                                 'Name': 'Your Name'
                             },
                             'To': [
                                 {
-                                    'Email': 'ckrawiec@pennstatehealth.psu.edu',
+                                    'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Replace with recipient's email
                                     'Name': 'Recipient Name'
                                 }
                             ],
@@ -1772,24 +1772,25 @@ if st.session_state.section == 6:
                             'Attachments': [
                                 {
                                     'ContentType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                                    'Filename': 'your_document.docx',
+                                    'Filename': 'your_document.docx',  # Use the actual filename
                                     'Base64Content': base64.b64encode(attachment_content).decode('utf-8')
                                 }
                             ]
                         }
                     ]
                 }
-                
+
+                # Send the email
                 response = requests.post(
                     'https://api.mailjet.com/v3/send',
-                    auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]), version='v3.1'),
-              json=email_data
+                    auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]),
+                    json=email_data
                 )
+
                 if response.status_code == 200:
                     print("Email sent successfully!")
                 else:
                     print("Failed to send email:", response.json())
-
 
             except Exception as e:
                 st.error(f"An error occurred: {e}")
@@ -1798,4 +1799,3 @@ if st.session_state.section == 6:
     with col1:
         if st.button("Previous", on_click=prev_section):
             pass
-

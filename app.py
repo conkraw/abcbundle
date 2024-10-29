@@ -1752,8 +1752,8 @@ if st.session_state.section == 6:
 
                 # Send the email with the document attached
                 with open(doc_file, 'rb') as f:
-                    attachment_content = f.read()
-
+                  attachment_content = f.read()
+            
                 email_data = {
                     'Messages': [
                         {
@@ -1779,23 +1779,24 @@ if st.session_state.section == 6:
                         }
                     ]
                 }
-
+                
                 # Send the email
-                response = requests.post(
-                    'https://api.mailjet.com/v3/send',
-                    auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]),
-                    json=email_data
-                )
-
-                if response.status_code == 200:
-                    print("Email sent successfully!")
-                else:
-                    print("Failed to send email:", response.json())
-
-            except Exception as e:
-                st.error(f"An error occurred: {e}")
-                st.exception(e)  # Print the stack trace for debugging
-
-    with col1:
-        if st.button("Previous", on_click=prev_section):
-            pass
+                try:
+                    response = requests.post(
+                        'https://api.mailjet.com/v3/send',
+                        auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]),
+                        json=email_data
+                    )
+                
+                    # Debugging information
+                    print("Response Status Code:", response.status_code)
+                    print("Response Text:", response.text)  # Log the raw response text
+                
+                    if response.status_code == 200:
+                        st.success("Email sent successfully!")
+                    else:
+                        st.error(f"Failed to send email: {response.status_code} - {response.text}")
+                
+                except Exception as e:
+                    st.error(f"An error occurred while sending the email: {e}")
+                    st.exception(e)  # Print the stack trace for debugging

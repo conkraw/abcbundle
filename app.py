@@ -9,7 +9,9 @@ import json
 from datetime import datetime
 import io
 import pytz 
-  
+import os
+from mailjet_rest import Client
+
 # Define mappings for ETT size, Blade type, and Apneic Oxygenation based on patient age
 age_to_ett_mapping = {'': '', 
                       '0 months': '3.5 mm',
@@ -1673,23 +1675,10 @@ if 'db' not in st.session_state:
         st.error(f"Failed to connect to Firestore: {str(e)}")
 
 
-import os
-from mailjet_rest import Client
 
 # Initialize Mailjet client
 mailjet = Client(auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]), version='v3.1')
 
-
-import streamlit as st
-import base64
-import os
-# Import your mailjet client and Firestore client
-# from mailjet_rest import Client
-# from google.cloud import firestore
-
-def create_word_doc(template_path, document_data):
-    # Your implementation to create a Word document
-    pass
 
 if st.session_state.section == 6:
     st.title("Download ABC Form")
@@ -1745,7 +1734,7 @@ if st.session_state.section == 6:
                 doc_file = create_word_doc(template_path, document_data)
                 st.success("Document created successfully!")
 
-                # Upload data to Firestore
+                # Upload data to Firebase
                 db = st.session_state.db  # Access the Firestore client from session state
                 data_to_upload = {
                     "form_completed_by": st.session_state.completed_by,
@@ -1764,43 +1753,6 @@ if st.session_state.section == 6:
                         mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
                     )
                 
-                # Send the document via email
-                with open(doc_file, 'rb') as f:
-                    file_content = f.read()
-                    base64_content = base64.b64encode(file_content).decode('utf-8')
-                
-                email_data = {
-                    'Messages': [
-                        {
-                            'From': {
-                                'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Your verified sender email
-                                'Name': 'Your Name'
-                            },
-                            'To': [
-                                {
-                                    'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Recipient's email
-                                    'Name': ''
-                                }
-                            ],
-                            'Subject': 'ABC Form Submission',
-                            'TextPart': 'Please find the attached ABC Form document.',
-                            'Attachments': [
-                                {
-                                    'ContentType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                                    'Filename': doc_file.split("/")[-1],
-                                    'Base64Content': base64_content
-                                }
-                            ]
-                        }
-                    ]
-                }
-
-                result = mailjet.send(data=email_data)
-                if result.status_code == 200:
-                    st.success("Email sent successfully!")
-                else:
-                    st.error("Failed to send email: " + str(result.json()))
-
                 os.remove(doc_file)  # Clean up the file after download
             except Exception as e:
                 st.error(f"An error occurred: {e}")

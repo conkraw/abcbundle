@@ -1676,11 +1676,23 @@ if 'db' not in st.session_state:
         st.error(f"Failed to connect to Firestore: {str(e)}")
 
 # Initialize Mailjet client
-mailjet = Client(auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]), version='v3.1')
+#mailjet = Client(auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]), version='v3.1')
 
 if st.session_state.section == 6:
     st.title("Download ABC Form")
-    st.write("Available methods:", dir(mailjet))
+  
+    mailjet = Client(auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]), version='v3.1')
+    
+    # Check if send method exists
+    print("Available methods:", dir(mailjet))
+    
+    # This should fail if send is not callable
+    try:
+        result = mailjet.send(data={"Messages": [{"From": {"Email": "sender@example.com"}, "To": [{"Email": "recipient@example.com"}], "Subject": "Test", "TextPart": "Hello!"}]}})
+        print(result.json())
+    except Exception as e:
+        print(f"Error: {e}")
+
 
     col1, col2, col3 = st.columns(3)
 

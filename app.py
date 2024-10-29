@@ -1752,7 +1752,7 @@ if st.session_state.section == 6:
                         mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
                     )
                 
-                os.remove(doc_file)  # Clean up the file after download
+                #os.remove(doc_file)  # Clean up the file after download
             except Exception as e:
                 st.error(f"An error occurred: {e}")
                 st.exception(e)  # Print the stack trace for debugging

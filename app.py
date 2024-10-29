@@ -1763,7 +1763,7 @@ if st.session_state.section == 6:
                             },
                             'To': [
                                 {
-                                    'Email': 'recipient_email@example.com',
+                                    'Email': 'ckrawiec@pennstatehealth.psu.edu',
                                     'Name': 'Recipient Name'
                                 }
                             ],
@@ -1782,10 +1782,9 @@ if st.session_state.section == 6:
                 
                 response = requests.post(
                     'https://api.mailjet.com/v3/send',
-                    auth=('your_api_key', 'your_api_secret'),
+                    auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]), version='v3.1'),
                     json=email_data
                 )
-                
                 if response.status_code == 200:
                     print("Email sent successfully!")
                 else:

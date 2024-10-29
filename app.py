@@ -1680,6 +1680,17 @@ from mailjet_rest import Client
 mailjet = Client(auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]), version='v3.1')
 
 
+import streamlit as st
+import base64
+import os
+# Import your mailjet client and Firestore client
+# from mailjet_rest import Client
+# from google.cloud import firestore
+
+def create_word_doc(template_path, document_data):
+    # Your implementation to create a Word document
+    pass
+
 if st.session_state.section == 6:
     st.title("Download ABC Form")
     
@@ -1734,7 +1745,7 @@ if st.session_state.section == 6:
                 doc_file = create_word_doc(template_path, document_data)
                 st.success("Document created successfully!")
 
-                # Upload data to Firebase
+                # Upload data to Firestore
                 db = st.session_state.db  # Access the Firestore client from session state
                 data_to_upload = {
                     "form_completed_by": st.session_state.completed_by,
@@ -1755,37 +1766,40 @@ if st.session_state.section == 6:
                 
                 # Send the document via email
                 with open(doc_file, 'rb') as f:
-                    email_data = {
-                        'Messages': [
-                            {
-                                'From': {
-                                    'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Your verified sender email
-                                    'Name': 'Your Name'
-                                },
-                                'To': [
-                                    {
-                                        'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Recipient's email
-                                        'Name': ''
-                                    }
-                                ],
-                                'Subject': 'ABC Form Submission',
-                                'TextPart': 'Please find the attached ABC Form document.',
-                                'Attachments': [
-                                    {
-                                        'ContentType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                                        'Filename': doc_file.split("/")[-1],
-                                        'Base64Content': f.read().encode('base64').decode('utf-8')
-                                    }
-                                ]
-                            }
-                        ]
-                    }
+                    file_content = f.read()
+                    base64_content = base64.b64encode(file_content).decode('utf-8')
+                
+                email_data = {
+                    'Messages': [
+                        {
+                            'From': {
+                                'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Your verified sender email
+                                'Name': 'Your Name'
+                            },
+                            'To': [
+                                {
+                                    'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Recipient's email
+                                    'Name': ''
+                                }
+                            ],
+                            'Subject': 'ABC Form Submission',
+                            'TextPart': 'Please find the attached ABC Form document.',
+                            'Attachments': [
+                                {
+                                    'ContentType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                    'Filename': doc_file.split("/")[-1],
+                                    'Base64Content': base64_content
+                                }
+                            ]
+                        }
+                    ]
+                }
 
-                    result = mailjet.send(data=email_data)
-                    if result.status_code == 200:
-                        st.success("Email sent successfully!")
-                    else:
-                        st.error("Failed to send email: " + str(result.json()))
+                result = mailjet.send(data=email_data)
+                if result.status_code == 200:
+                    st.success("Email sent successfully!")
+                else:
+                    st.error("Failed to send email: " + str(result.json()))
 
                 os.remove(doc_file)  # Clean up the file after download
             except Exception as e:
@@ -1797,3 +1811,4 @@ if st.session_state.section == 6:
     with col1:
         if st.button("Previous", on_click=prev_section):
             pass
+

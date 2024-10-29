@@ -25,12 +25,12 @@ if st.button("Send Email"):
                 {
                     'From': {
                         'Email': SENDER_EMAIL,
-                        'Name': 'Your Name'
+                        'Name': 'Your Name'  # Optional
                     },
                     'To': [
                         {
                             'Email': recipient,
-                            'Name': 'Recipient Name'
+                            'Name': 'Recipient Name'  # Optional
                         }
                     ],
                     'Subject': subject,
@@ -39,11 +39,12 @@ if st.button("Send Email"):
             ]
         }
 
-        st.write("Sending data:", data)  # Debugging line
+        # Debugging output
+        st.write("Sending data:", data)
 
         result = mailjet.send(data=data)
 
-        st.write("Result:", result)  # Debugging line
+        st.write("Result:", result)  # Debugging output
 
         if result.status_code == 200:
             st.success("Email sent successfully!")
@@ -51,3 +52,4 @@ if st.button("Send Email"):
             st.error(f"Failed to send email: {result.json()}")
     else:
         st.warning("Please fill in all fields.")
+

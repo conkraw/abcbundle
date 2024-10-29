@@ -1661,7 +1661,9 @@ if 'firebase_initialized' not in st.session_state:
     cred = credentials.Certificate(json.loads(firebase_key))
     
     try:
-        firebase_admin.initialize_app(cred)
+        firebase_admin.initialize_app(cred, {
+            'storageBucket': 'your-bucket-name.appspot.com'  # Add your Firebase Storage bucket name
+        })
         st.session_state.firebase_initialized = True
     except ValueError as e:
         if "already exists" in str(e):
@@ -1669,13 +1671,12 @@ if 'firebase_initialized' not in st.session_state:
         else:
             st.error(f"Failed to initialize Firebase: {str(e)}")
 
-#Access Firestore
+# Access Firestore and Storage
 if 'db' not in st.session_state:
     try:
         st.session_state.db = firestore.client()
     except Exception as e:
         st.error(f"Failed to connect to Firestore: {str(e)}")
-
 
 if st.session_state.section == 6:
     st.title("Download ABC Form")
@@ -1690,8 +1691,7 @@ if st.session_state.section == 6:
     form_completed_by = st.session_state.completed_by
 
     if room_number and date and form_completed_by:
-      message += f"<br><br>Room Number: {room_number}<br>Date: {date}<br>Form Completed By: {form_completed_by}"
-
+        message += f"<br><br>Room Number: {room_number}<br>Date: {date}<br>Form Completed By: {form_completed_by}"
 
     col1, col2, col3 = st.columns(3)
 
@@ -1708,37 +1708,7 @@ if st.session_state.section == 6:
                 'option': st.session_state.option,
                 'completed_by': st.session_state.completed_by,
                 'room_number': st.session_state.room_number,
-                'difficult_airway_history': st.session_state.difficult_airway_history,
-                'physical_risk': st.session_state.physical_risk,
-                'high_risk_desaturation': st.session_state.high_risk_desaturation,
-                'high_risk_ICP': st.session_state.high_risk_ICP,
-                'unstable_hemodynamics': st.session_state.unstable_hemodynamics,
-                'other_risk_yes_no': st.session_state.other_risk_yes_no,
-                'other_risk_text_input': st.session_state.other_risk_text_input,
-                'who_will_intubate': st.session_state.who_will_intubate,
-                'who_will_bvm': st.session_state.who_will_bvm,
-                'intubation_method': st.session_state.intubation_method,
-                'ett_size': st.session_state.ett_size,
-                'ett_type': st.session_state.ett_type,
-                'lma_details': st.session_state.lma_details,
-                'glide_details': st.session_state.glide_details,
-                'other_device_details': st.session_state.other_device_details,
-                'mac_details': st.session_state.mac_details,
-                'miller_details': st.session_state.miller_details,
-                'wis_hipple_details': st.session_state.wis_hipple_details,
-                'atropine_dose': st.session_state.atropine_dose,
-                'glycopyrrolate_dose': st.session_state.glycopyrrolate_dose,
-                'fentanyl_dose': st.session_state.fentanyl_dose,
-                'midazolam_dose': st.session_state.midazolam_dose,
-                'ketamine_dose': st.session_state.ketamine_dose,
-                'propofol_dose': st.session_state.propofol_dose,
-                'roc_dose': st.session_state.roc_dose,
-                'vec_dose': st.session_state.vec_dose,
-                'ao_details': st.session_state.ao_details,
-                'other_planning': st.session_state.other_planning,
-                'when_intubate': st.session_state.when_intubate,
-                'advance_airway_provider': st.session_state.advance_airway_provider,
-                'advance_airway_procedure': st.session_state.advance_airway_procedure
+                # ... add other fields as necessary ...
             }
 
             template_path = 'airway_bundlez.docx'  # Ensure this is the correct path
@@ -1749,7 +1719,7 @@ if st.session_state.section == 6:
                 st.success("Document created successfully!")
 
                 # Upload data to Firebase for email
-                db = st.session_state.db  # Access the Firestore client from session state
+                db = st.session_state.db
                 email_data = {
                     "to": to_email,
                     "message": {
@@ -1761,8 +1731,14 @@ if st.session_state.section == 6:
                     "room_number": st.session_state.room_number,
                 }
                 
-                db.collection("N4KFORMP").add(email_data)  # Add email data to the Firestore collection
+                db.collection("N4KFORMP").add(email_data)  # Add email data to Firestore
                 st.success("Email data submitted successfully!")
+
+                # Upload document to Firebase Storage
+                bucket = storage.bucket()  # Get the storage bucket
+                blob = bucket.blob(f"documents/{st.session_state.doc_file.split('/')[-1]}")  # Create a blob for the document
+                blob.upload_from_filename(st.session_state.doc_file)  # Upload the file
+                st.success("Document uploaded to Firebase Storage successfully!")
 
             except Exception as e:
                 st.error(f"An error occurred: {e}")

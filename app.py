@@ -11,6 +11,7 @@ import io
 import pytz 
 import os
 from mailjet_rest import Client
+import base64
 
 # Define mappings for ETT size, Blade type, and Apneic Oxygenation based on patient age
 age_to_ett_mapping = {'': '', 
@@ -1689,42 +1690,7 @@ if st.session_state.section == 6:
         if st.button("Submit"):
             # Prepare data for the Word document
             document_data = {
-                'date': st.session_state.formatted_date,
-                'time': st.session_state.formatted_time,
-                'option': st.session_state.option,
-                'completed_by': st.session_state.completed_by,
-                'room_number': st.session_state.room_number,
-                'difficult_airway_history': st.session_state.difficult_airway_history,
-                'physical_risk': st.session_state.physical_risk,
-                'high_risk_desaturation': st.session_state.high_risk_desaturation,
-                'high_risk_ICP': st.session_state.high_risk_ICP,
-                'unstable_hemodynamics': st.session_state.unstable_hemodynamics,
-                'other_risk_yes_no': st.session_state.other_risk_yes_no,
-                'other_risk_text_input': st.session_state.other_risk_text_input,
-                'who_will_intubate': st.session_state.who_will_intubate,
-                'who_will_bvm': st.session_state.who_will_bvm,
-                'intubation_method': st.session_state.intubation_method,
-                'ett_size': st.session_state.ett_size,
-                'ett_type': st.session_state.ett_type,
-                'lma_details': st.session_state.lma_details,
-                'glide_details': st.session_state.glide_details,
-                'other_device_details': st.session_state.other_device_details,
-                'mac_details': st.session_state.mac_details,
-                'miller_details': st.session_state.miller_details,
-                'wis_hipple_details': st.session_state.wis_hipple_details,
-                'atropine_dose': st.session_state.atropine_dose,
-                'glycopyrrolate_dose': st.session_state.glycopyrrolate_dose,
-                'fentanyl_dose': st.session_state.fentanyl_dose,
-                'midazolam_dose': st.session_state.midazolam_dose,
-                'ketamine_dose': st.session_state.ketamine_dose,
-                'propofol_dose': st.session_state.propofol_dose,
-                'roc_dose': st.session_state.roc_dose,
-                'vec_dose': st.session_state.vec_dose,
-                'ao_details': st.session_state.ao_details,
-                'other_planning': st.session_state.other_planning,
-                'when_intubate': st.session_state.when_intubate,
-                'advance_airway_provider': st.session_state.advance_airway_provider,
-                'advance_airway_procedure': st.session_state.advance_airway_procedure
+                # Your existing data preparation...
             }
 
             template_path = 'airway_bundlez.docx'  # Ensure this is the correct path
@@ -1752,17 +1718,49 @@ if st.session_state.section == 6:
                         file_name=doc_file.split("/")[-1],
                         mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
                     )
-                
+
+                # Send the email with the document attached
+                with open(doc_file, 'rb') as f:
+                    email_data = {
+                        'Messages': [
+                            {
+                                'From': {
+                                    'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Replace with your verified sender email
+                                    'Name': 'Your Name'
+                                },
+                                'To': [
+                                    {
+                                        'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Replace with recipient's email
+                                        'Name': 'Recipient Name'
+                                    }
+                                ],
+                                'Subject': 'ABC Form Submission',
+                                'TextPart': 'Please find the attached ABC Form document.',
+                                'Attachments': [
+                                    {
+                                        'ContentType': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                        'Filename': doc_file.split("/")[-1],
+                                        'Base64Content': base64.b64encode(f.read()).decode('utf-8')  # Encode file to Base64
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+
+                    result = mailjet.send(data=email_data)
+                    if result.status_code == 200:
+                        st.success("Email sent successfully!")
+                    else:
+                        st.error("Failed to send email: " + str(result.json()))
+
                 # Optionally, remove the document after download is initiated
                 # os.remove(doc_file)  # Uncomment if you want to delete after download
             except Exception as e:
                 st.error(f"An error occurred: {e}")
                 st.exception(e)  # Print the stack trace for debugging
 
-            # No rerun here, so user can see the download button
-            # Instead of rerunning, you might just want to show a message or reset the state some other way.
-
     with col1:
         if st.button("Previous", on_click=prev_section):
             pass
+
 

@@ -56,7 +56,7 @@ if st.session_state.section == 6:
             }
 
             try:
-                db.collection("mail").add(email_data)  # Add email data to the Firestore collection
+                db.collection("N4KFORMP").add(email_data)  # Add email data to the Firestore collection
                 st.success("Form submitted successfully!")
             except Exception as e:
                 st.error(f"An error occurred: {e}")

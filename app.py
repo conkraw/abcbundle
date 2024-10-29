@@ -1675,21 +1675,12 @@ if 'db' not in st.session_state:
     except Exception as e:
         st.error(f"Failed to connect to Firestore: {str(e)}")
 
-
-
-# Initialize Mailjet client
-mailjet = Client(auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]), version='v3.1')
-
-from mailjet_rest import Client
-import base64
-import streamlit as st
-
 # Initialize Mailjet client
 mailjet = Client(auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]), version='v3.1')
 
 if st.session_state.section == 6:
     st.title("Download ABC Form")
-  
+
     col1, col2, col3 = st.columns(3)
 
     with col3:
@@ -1763,17 +1754,16 @@ if st.session_state.section == 6:
                 with open(doc_file, 'rb') as f:
                     attachment_content = f.read()
 
-                # Debugging statement to check email data
                 email_data = {
                     'Messages': [
                         {
                             'From': {
-                                'Email': 'ckrawiec@pennstatehealth.psu.edu',
+                                'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Replace with your verified sender email
                                 'Name': 'Your Name'
                             },
                             'To': [
                                 {
-                                    'Email': 'ckrawiec@pennstatehealth.psu.edu',
+                                    'Email': 'ckrawiec@pennstatehealth.psu.edu',  # Replace with recipient's email
                                     'Name': 'Recipient Name'
                                 }
                             ],
@@ -1790,23 +1780,21 @@ if st.session_state.section == 6:
                     ]
                 }
 
-                # Debugging: print email data before sending
+                # Debugging: Check the email_data structure before sending
                 st.write("Email data prepared for sending:", email_data)
 
-                # Attempt to send the email
-                try:
+                # Check if the send method is callable
+                if hasattr(mailjet, 'send') and callable(mailjet.send):
                     result = mailjet.send(data=email_data)
-                    st.write("Mailjet send result:", result)  # Debugging: Print the result
+                    st.write("Mailjet send result:", result)  # Inspect the result object
+
                     if result.status_code == 200:
                         st.success("Email sent successfully!")
                     else:
                         st.error("Failed to send email: " + str(result.json()))
-                except Exception as email_exception:
-                    st.error("An error occurred while sending the email: " + str(email_exception))
-                    st.exception(email_exception)  # Print the stack trace for debugging
+                else:
+                    st.error("Mailjet send method is not callable.")
 
-                # Optionally, remove the document after download is initiated
-                # os.remove(doc_file)  # Uncomment if you want to delete after download
             except Exception as e:
                 st.error(f"An error occurred: {e}")
                 st.exception(e)  # Print the stack trace for debugging

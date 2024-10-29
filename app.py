@@ -1661,9 +1661,7 @@ if 'firebase_initialized' not in st.session_state:
     cred = credentials.Certificate(json.loads(firebase_key))
     
     try:
-        firebase_admin.initialize_app(cred, {
-            'storageBucket': 'your-bucket-name.appspot.com'  # Add your Firebase Storage bucket name
-        })
+        firebase_admin.initialize_app(cred)
         st.session_state.firebase_initialized = True
     except ValueError as e:
         if "already exists" in str(e):
@@ -1671,12 +1669,13 @@ if 'firebase_initialized' not in st.session_state:
         else:
             st.error(f"Failed to initialize Firebase: {str(e)}")
 
-# Access Firestore and Storage
+#Access Firestore
 if 'db' not in st.session_state:
     try:
         st.session_state.db = firestore.client()
     except Exception as e:
         st.error(f"Failed to connect to Firestore: {str(e)}")
+
 
 if st.session_state.section == 6:
     st.title("Download ABC Form")
@@ -1691,7 +1690,8 @@ if st.session_state.section == 6:
     form_completed_by = st.session_state.completed_by
 
     if room_number and date and form_completed_by:
-        message += f"<br><br>Room Number: {room_number}<br>Date: {date}<br>Form Completed By: {form_completed_by}"
+      message += f"<br><br>Room Number: {room_number}<br>Date: {date}<br>Form Completed By: {form_completed_by}"
+
 
     col1, col2, col3 = st.columns(3)
 
@@ -1749,7 +1749,7 @@ if st.session_state.section == 6:
                 st.success("Document created successfully!")
 
                 # Upload data to Firebase for email
-                db = st.session_state.db
+                db = st.session_state.db  # Access the Firestore client from session state
                 email_data = {
                     "to": to_email,
                     "message": {
@@ -1761,14 +1761,8 @@ if st.session_state.section == 6:
                     "room_number": st.session_state.room_number,
                 }
                 
-                db.collection("N4KFORMP").add(email_data)  # Add email data to Firestore
+                db.collection("N4KFORMP").add(email_data)  # Add email data to the Firestore collection
                 st.success("Email data submitted successfully!")
-
-                # Upload document to Firebase Storage
-                bucket = storage.bucket()  # Get the storage bucket
-                blob = bucket.blob(f"documents/{st.session_state.doc_file.split('/')[-1]}")  # Create a blob for the document
-                blob.upload_from_filename(st.session_state.doc_file)  # Upload the file
-                st.success("Document uploaded to Firebase Storage successfully!")
 
             except Exception as e:
                 st.error(f"An error occurred: {e}")

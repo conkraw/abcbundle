@@ -1783,7 +1783,7 @@ if st.session_state.section == 6:
                 response = requests.post(
                     'https://api.mailjet.com/v3/send',
                     auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]), version='v3.1'),
-                    json=email_data
+              json=email_data
                 )
                 if response.status_code == 200:
                     print("Email sent successfully!")

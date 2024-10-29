@@ -1676,14 +1676,14 @@ if 'db' not in st.session_state:
     except Exception as e:
         st.error(f"Failed to connect to Firestore: {str(e)}")
 
-# Initialize Mailjet client
-mailjet = Client(auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]), version='v3.1')
-
-# Initialize Mailjet client
-mailjet = Client(auth=(st.secrets["mailjet"]["api_key"], st.secrets["mailjet"]["api_secret"]), version='v3.1')
 
 if st.session_state.section == 6:
     st.title("Download ABC Form")
+
+    # Input fields for email data
+    to_email = "ckrawiec@pennstatehealth.psu.edu"
+    subject = "Pink Form Submission"
+    message = "Here is the Pink Form" 
     
     col1, col2, col3 = st.columns(3)
 
@@ -1740,15 +1740,21 @@ if st.session_state.section == 6:
                 st.session_state.doc_file = create_word_doc(template_path, document_data)
                 st.success("Document created successfully!")
 
-                # Upload data to Firebase
+                # Upload data to Firebase for email
                 db = st.session_state.db  # Access the Firestore client from session state
-                data_to_upload = {
+                email_data = {
+                    "to": to_email,
+                    "message": {
+                        "subject": subject,
+                        "html": message,
+                    },
                     "form_completed_by": st.session_state.completed_by,
                     "date": st.session_state.formatted_date,
                     "room_number": st.session_state.room_number,
                 }
-                db.collection("N4KFORMP").add(data_to_upload)
-                st.success("Form submitted successfully!")
+                
+                db.collection("N4KFORMP").add(email_data)  # Add email data to the Firestore collection
+                st.success("Email data submitted successfully!")
 
             except Exception as e:
                 st.error(f"An error occurred: {e}")

@@ -1684,7 +1684,14 @@ if st.session_state.section == 6:
     to_email = "ckrawiec@pennstatehealth.psu.edu"
     subject = "Pink Form Submission"
     message = "Here is the Pink Form" 
-    
+
+    room_number = st.session_state.room_number
+    date = st.session_state.formatted_date
+    form_completed_by = st.session_state.completed_by
+
+    if room_number and date and form_completed_by:
+        message += f"\n\nRoom Number: {room_number}\nDate: {date}\nForm Completed By: {form_completed_by}"
+
     col1, col2, col3 = st.columns(3)
 
     # Initialize session state variables

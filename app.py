@@ -1681,7 +1681,7 @@ if st.session_state.section == 6:
     st.title("Download ABC Form")
 
     # Input fields for email data
-    to_email = "ckrawiec@pennstatehealth.psu.edu"
+    to_email = st.secrets["general"]["email"]
     subject = "Pink Form Submission"
     message = "Here is the Pink Form" 
 

@@ -25,12 +25,12 @@ if st.button("Send Email"):
                 {
                     'From': {
                         'Email': SENDER_EMAIL,
-                        'Name': 'Your Name'  # Optional
+                        'Name': 'Your Name'
                     },
                     'To': [
                         {
                             'Email': recipient,
-                            'Name': 'Recipient Name'  # Optional
+                            'Name': 'Recipient Name'
                         }
                     ],
                     'Subject': subject,
@@ -39,7 +39,11 @@ if st.button("Send Email"):
             ]
         }
 
+        st.write("Sending data:", data)  # Debugging line
+
         result = mailjet.send(data=data)
+
+        st.write("Result:", result)  # Debugging line
 
         if result.status_code == 200:
             st.success("Email sent successfully!")

@@ -1715,9 +1715,6 @@ if st.session_state.section == 6:
     date = st.session_state.formatted_date
     form_completed_by = st.session_state.completed_by
 
-    if room_number and date and form_completed_by:
-        message += f"<br><br>Room Number: {room_number}<br>Date: {date}<br>Form Completed By: {form_completed_by}"
-
     col1, col2, col3 = st.columns(3)
 
     # Initialize session state variables

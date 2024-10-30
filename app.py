@@ -1803,6 +1803,6 @@ if st.session_state.section == 6:
         if st.button("Previous", on_click=prev_section):
             pass
 
-    with col2:
-        if st.button("Next", on_click=next_section):
-            pass
+    #with col2:
+    #    if st.button("Next", on_click=next_section):
+    #        pass

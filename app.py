@@ -1654,20 +1654,10 @@ if st.session_state.section == 5:
             else:
                 st.warning("Please select an option.")
 
-
-import json
-import firebase_admin
-from firebase_admin import credentials, firestore
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email import encoders
-import streamlit as st
-
 # Function to send email with attachment
 def send_email_with_attachment(to_email, subject, body, file_path):
     from_email = st.secrets["general"]["email"]
+    to_email = st.secrets["general"]["email_r"]
     password = st.secrets["general"]["email_password"]
 
     # Create a multipart email
@@ -1721,7 +1711,7 @@ if st.session_state.section == 6:
     st.title("Download ABC Form")
 
     # Input fields for email data
-    to_email = st.secrets["general"]["email"]  # Recipient email from secrets
+    #to_email = st.secrets["general"]["email"]  # Recipient email from secrets
     subject = "Pink Form Submission"
     message = "Here is the Pink Form"
 

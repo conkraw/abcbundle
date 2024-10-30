@@ -10,3 +10,8 @@ Pillow
 PyPDF2
 pdfrw
 mailjet-rest
+streamlit
+python-docx
+firebase-admin
+pytz
+requests

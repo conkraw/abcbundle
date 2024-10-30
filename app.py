@@ -1721,9 +1721,6 @@ if st.session_state.section == 6:
         st.session_state.doc_file = None
 
     with col3:
-        # User email input
-        user_email = st.text_input("Enter your email address (optional):")
-
         if st.button("Submit"):
             # Prepare data for the Word document
             document_data = {
@@ -1798,6 +1795,13 @@ if st.session_state.section == 6:
                     mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
                 )
 
+    # User email input above Previous and Next buttons
+    user_email = st.text_input("Enter your email address (optional):")
+
     with col1:
         if st.button("Previous", on_click=prev_section):
+            pass
+
+    with col2:
+        if st.button("Next", on_click=next_section):
             pass

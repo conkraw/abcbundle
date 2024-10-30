@@ -1710,6 +1710,8 @@ if 'db' not in st.session_state:
 if st.session_state.section == 6:
     st.title("Download ABC Form")
 
+    user_email = st.text_input("Enter your email address (optional):", value="", key="user_email_input")
+  
     room_number = st.session_state.room_number
     date = st.session_state.formatted_date
     form_completed_by = st.session_state.completed_by
@@ -1720,7 +1722,7 @@ if st.session_state.section == 6:
     if 'doc_file' not in st.session_state:
         st.session_state.doc_file = None
 
-    user_email = st.text_input("Enter your email address (optional):", value="", key="user_email_input")
+    
 
     with col3:
         if st.button("Submit"):

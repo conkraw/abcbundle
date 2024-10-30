@@ -1714,13 +1714,15 @@ if st.session_state.section == 6:
     date = st.session_state.formatted_date
     form_completed_by = st.session_state.completed_by
 
+    user_email = st.text_input("Enter your email address (optional):", value="", key="user_email_input")
+  
     col1, col2, col3 = st.columns(3)
 
     # Initialize session state variables
     if 'doc_file' not in st.session_state:
         st.session_state.doc_file = None
 
-    user_email = st.text_input("Enter your email address (optional):", value="", key="user_email_input")
+    
 
     with col3:
         if st.button("Submit"):

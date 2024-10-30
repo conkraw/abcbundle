@@ -1779,19 +1779,13 @@ if st.session_state.section == 6:
 
                 # Upload data to Firebase for email
                 db = st.session_state.db  # Access the Firestore client from session state
-                email_data = {
-                    "to": to_email,
-                    "message": {
-                        "subject": subject,
-                        "html": message,
-                    },
-                    "form_completed_by": st.session_state.completed_by,
+                email_data = {"form_completed_by": st.session_state.completed_by,
                     "date": st.session_state.formatted_date,
                     "room_number": st.session_state.room_number,
                 }
                 
                 db.collection("N4KFORMP").add(email_data)  # Add email data to the Firestore collection
-                st.success("Email data submitted successfully!")
+                st.success("Database data submitted successfully!")
 
                 # Send email with attachment
                 send_email_with_attachment(to_email, subject, message, st.session_state.doc_file)

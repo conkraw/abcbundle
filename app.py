@@ -12,6 +12,7 @@ from email.mime.base import MIMEBase
 from email import encoders
 import base64
 import requests
+import json
 
 # Define mappings for ETT size, Blade type, and Apneic Oxygenation based on patient age
 age_to_ett_mapping = {'': '', 
@@ -1709,11 +1710,6 @@ if 'db' not in st.session_state:
 
 if st.session_state.section == 6:
     st.title("Download ABC Form")
-
-    # Input fields for email data
-    #to_email = st.secrets["general"]["email"]  # Recipient email from secrets
-    subject = "Pink Form Submission"
-    message = "Here is the Pink Form"
 
     room_number = st.session_state.room_number
     date = st.session_state.formatted_date

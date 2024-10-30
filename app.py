@@ -1656,14 +1656,14 @@ if st.session_state.section == 5:
                 st.warning("Please select an option.")
 
 # Function to send email with attachment
-def send_email_with_attachment(to_email, subject, body, file_path):
+def send_email_with_attachment(to_emails, subject, body, file_path):
     from_email = st.secrets["general"]["email"]
     password = st.secrets["general"]["email_password"]
 
     # Create a multipart email
     msg = MIMEMultipart()
     msg['From'] = from_email
-    msg['To'] = to_email
+    msg['To'] = ', '.join(to_emails)  # Join multiple email addresses
     msg['Subject'] = subject
 
     # Attach the email body
@@ -1721,6 +1721,9 @@ if st.session_state.section == 6:
         st.session_state.doc_file = None
 
     with col3:
+        # User email input
+        user_email = st.text_input("Enter your email address (optional):")
+
         if st.button("Submit"):
             # Prepare data for the Word document
             document_data = {
@@ -1773,9 +1776,13 @@ if st.session_state.section == 6:
                 subject = "Pink Form Submission"
                 message = f"Here is the Pink Form.<br><br>Room Number: {room_number}<br>Date: {date}<br>Form Completed By: {form_completed_by}"
 
+                # Prepare the email recipients
+                to_emails = [st.secrets["general"]["email_r"]]  # Designated email
+                if user_email:  # Add user's email if provided
+                    to_emails.append(user_email)
+
                 # Send email with attachment
-                to_email = st.secrets["general"]["email_r"]  # Recipient email from secrets
-                send_email_with_attachment(to_email, subject, message, st.session_state.doc_file)
+                send_email_with_attachment(to_emails, subject, message, st.session_state.doc_file)
 
             except Exception as e:
                 st.error(f"An error occurred: {e}")

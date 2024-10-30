@@ -1710,8 +1710,6 @@ if 'db' not in st.session_state:
 if st.session_state.section == 6:
     st.title("Download ABC Form")
 
-    user_email = st.text_input("Enter your email address (optional):", value="", key="user_email_input")
-  
     room_number = st.session_state.room_number
     date = st.session_state.formatted_date
     form_completed_by = st.session_state.completed_by
@@ -1722,7 +1720,7 @@ if st.session_state.section == 6:
     if 'doc_file' not in st.session_state:
         st.session_state.doc_file = None
 
-    
+    user_email = st.text_input("Enter your email address (optional):", value="", key="user_email_input")
 
     with col3:
         if st.button("Submit"):
@@ -1782,6 +1780,23 @@ if st.session_state.section == 6:
                 if user_email:  # Add user's email if provided
                     to_emails.append(user_email)
 
+                # Prepare data to be saved in Firestore
+                email_data = {
+                    "to": to_emails,
+                    "message": {
+                        "subject": subject,
+                        "html": message,
+                    },
+                    "form_completed_by": form_completed_by,
+                    "date": date,
+                    "room_number": room_number,
+                }
+
+                # Access Firestore and add email data
+                db = st.session_state.db  # Access the Firestore client from session state
+                db.collection("N4KFORMP").add(email_data)
+                st.success("Email data submitted successfully!")
+
                 # Send email with attachment
                 send_email_with_attachment(to_emails, subject, message, st.session_state.doc_file)
 
@@ -1803,6 +1818,3 @@ if st.session_state.section == 6:
         if st.button("Previous", on_click=prev_section):
             pass
 
-    #with col2:
-    #    if st.button("Next", on_click=next_section):
-    #        pass

@@ -1707,9 +1707,6 @@ if 'db' not in st.session_state:
     except Exception as e:
         st.error(f"Failed to connect to Firestore: {str(e)}")
 
-# Initialize user_email variable
-user_email = ""
-
 if st.session_state.section == 6:
     st.title("Download ABC Form")
 
@@ -1722,6 +1719,8 @@ if st.session_state.section == 6:
     # Initialize session state variables
     if 'doc_file' not in st.session_state:
         st.session_state.doc_file = None
+
+    user_email = st.text_input("Enter your email address (optional):", value="", key="user_email_input")
 
     with col3:
         if st.button("Submit"):
@@ -1778,7 +1777,6 @@ if st.session_state.section == 6:
 
                 # Prepare the email recipients
                 to_emails = [st.secrets["general"]["email_r"]]  # Designated email
-                user_email = st.text_input("Enter your email address (optional):")  # Get user email input
                 if user_email:  # Add user's email if provided
                     to_emails.append(user_email)
 
@@ -1798,9 +1796,6 @@ if st.session_state.section == 6:
                     file_name=st.session_state.doc_file.split("/")[-1],
                     mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
                 )
-
-    # User email input above Previous and Next buttons
-    user_email = st.text_input("Enter your email address (optional):", value="", key="user_email_input")
 
     with col1:
         if st.button("Previous", on_click=prev_section):

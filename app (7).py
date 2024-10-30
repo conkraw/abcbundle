@@ -1676,22 +1676,12 @@ if 'db' not in st.session_state:
     except Exception as e:
         st.error(f"Failed to connect to Firestore: {str(e)}")
 
-
 if st.session_state.section == 6:
     st.title("Download ABC Form")
-
-    # Input fields for email data
-    to_email = st.secrets["general"]["email"]
-    subject = "Pink Form Submission"
-    message = "Here is the Pink Form" 
 
     room_number = st.session_state.room_number
     date = st.session_state.formatted_date
     form_completed_by = st.session_state.completed_by
-
-    if room_number and date and form_completed_by:
-      message += f"<br><br>Room Number: {room_number}<br>Date: {date}<br>Form Completed By: {form_completed_by}"
-
 
     col1, col2, col3 = st.columns(3)
 
@@ -1699,15 +1689,17 @@ if st.session_state.section == 6:
     if 'doc_file' not in st.session_state:
         st.session_state.doc_file = None
 
-    with col3: 
+    user_email = st.text_input("Enter your email address (optional):", value="", key="user_email_input")
+
+    with col3:
         if st.button("Submit"):
             # Prepare data for the Word document
             document_data = {
-                'date': st.session_state.formatted_date,
+                'date': date,
                 'time': st.session_state.formatted_time,
                 'option': st.session_state.option,
-                'completed_by': st.session_state.completed_by,
-                'room_number': st.session_state.room_number,
+                'completed_by': form_completed_by,
+                'room_number': room_number,
                 'difficult_airway_history': st.session_state.difficult_airway_history,
                 'physical_risk': st.session_state.physical_risk,
                 'high_risk_desaturation': st.session_state.high_risk_desaturation,
@@ -1748,21 +1740,34 @@ if st.session_state.section == 6:
                 st.session_state.doc_file = create_word_doc(template_path, document_data)
                 st.success("Document created successfully!")
 
-                # Upload data to Firebase for email
-                db = st.session_state.db  # Access the Firestore client from session state
+                # Define subject and message for email
+                subject = "Pink Form Submission"
+                message = f"Here is the Pink Form.<br><br>Room Number: {room_number}<br>Date: {date}<br>Form Completed By: {form_completed_by}"
+
+                # Prepare the email recipients
+                to_emails = [st.secrets["general"]["email_r"]]  # Designated email
+                if user_email:  # Add user's email if provided
+                    to_emails.append(user_email)
+
+                # Prepare data to be saved in Firestore
                 email_data = {
-                    "to": to_email,
+                    "to": to_emails,
                     "message": {
                         "subject": subject,
                         "html": message,
                     },
-                    "form_completed_by": st.session_state.completed_by,
-                    "date": st.session_state.formatted_date,
-                    "room_number": st.session_state.room_number,
+                    "form_completed_by": form_completed_by,
+                    "date": date,
+                    "room_number": room_number,
                 }
-                
-                db.collection("N4KFORMP").add(email_data)  # Add email data to the Firestore collection
+
+                # Access Firestore and add email data
+                db = st.session_state.db  # Access the Firestore client from session state
+                db.collection("N4KFORMP").add(email_data)
                 st.success("Email data submitted successfully!")
+
+                # Send email with attachment
+                send_email_with_attachment(to_emails, subject, message, st.session_state.doc_file)
 
             except Exception as e:
                 st.error(f"An error occurred: {e}")

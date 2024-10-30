@@ -4,13 +4,12 @@ from io import BytesIO
 from datetime import datetime
 import firebase_admin
 from firebase_admin import credentials, firestore, storage
-import os
-import json
-from datetime import datetime
-import io
 import pytz 
-import os
-from mailjet_rest import Client
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
 import base64
 import requests
 
@@ -1656,6 +1655,48 @@ if st.session_state.section == 5:
                 st.warning("Please select an option.")
 
 
+import json
+import firebase_admin
+from firebase_admin import credentials, firestore
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+import streamlit as st
+
+# Function to send email with attachment
+def send_email_with_attachment(to_email, subject, body, file_path):
+    from_email = st.secrets["general"]["email"]
+    password = st.secrets["general"]["email_password"]
+
+    # Create a multipart email
+    msg = MIMEMultipart()
+    msg['From'] = from_email
+    msg['To'] = to_email
+    msg['Subject'] = subject
+
+    # Attach the email body
+    msg.attach(MIMEText(body, 'html'))
+
+    # Attach the Word document
+    with open(file_path, 'rb') as attachment:
+        part = MIMEBase('application', 'octet-stream')
+        part.set_payload(attachment.read())
+        encoders.encode_base64(part)
+        part.add_header('Content-Disposition', f'attachment; filename={file_path.split("/")[-1]}')
+        msg.attach(part)
+
+    # Send the email using SMTP with SSL
+    try:
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+            server.login(from_email, password)
+            server.send_message(msg)
+            st.success("Email sent successfully!")
+    except Exception as e:
+        st.error(f"Error sending email: {e}")
+
+# Firebase initialization
 if 'firebase_initialized' not in st.session_state:
     firebase_key = st.secrets["FIREBASE_KEY"]
     cred = credentials.Certificate(json.loads(firebase_key))
@@ -1669,29 +1710,27 @@ if 'firebase_initialized' not in st.session_state:
         else:
             st.error(f"Failed to initialize Firebase: {str(e)}")
 
-#Access Firestore
+# Access Firestore
 if 'db' not in st.session_state:
     try:
         st.session_state.db = firestore.client()
     except Exception as e:
         st.error(f"Failed to connect to Firestore: {str(e)}")
 
-
 if st.session_state.section == 6:
     st.title("Download ABC Form")
 
     # Input fields for email data
-    to_email = st.secrets["general"]["email"]
+    to_email = st.secrets["general"]["email"]  # Recipient email from secrets
     subject = "Pink Form Submission"
-    message = "Here is the Pink Form" 
+    message = "Here is the Pink Form"
 
     room_number = st.session_state.room_number
     date = st.session_state.formatted_date
     form_completed_by = st.session_state.completed_by
 
     if room_number and date and form_completed_by:
-      message += f"<br><br>Room Number: {room_number}<br>Date: {date}<br>Form Completed By: {form_completed_by}"
-
+        message += f"<br><br>Room Number: {room_number}<br>Date: {date}<br>Form Completed By: {form_completed_by}"
 
     col1, col2, col3 = st.columns(3)
 
@@ -1699,7 +1738,7 @@ if st.session_state.section == 6:
     if 'doc_file' not in st.session_state:
         st.session_state.doc_file = None
 
-    with col3: 
+    with col3:
         if st.button("Submit"):
             # Prepare data for the Word document
             document_data = {
@@ -1764,6 +1803,9 @@ if st.session_state.section == 6:
                 db.collection("N4KFORMP").add(email_data)  # Add email data to the Firestore collection
                 st.success("Email data submitted successfully!")
 
+                # Send email with attachment
+                send_email_with_attachment(to_email, subject, message, st.session_state.doc_file)
+
             except Exception as e:
                 st.error(f"An error occurred: {e}")
                 st.exception(e)  # Print the stack trace for debugging
@@ -1781,3 +1823,4 @@ if st.session_state.section == 6:
     with col1:
         if st.button("Previous", on_click=prev_section):
             pass
+

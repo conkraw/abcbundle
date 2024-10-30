@@ -1658,7 +1658,6 @@ if st.session_state.section == 5:
 # Function to send email with attachment
 def send_email_with_attachment(to_email, subject, body, file_path):
     from_email = st.secrets["general"]["email"]
-    to_email = st.secrets["general"]["email_r"]
     password = st.secrets["general"]["email_password"]
 
     # Create a multipart email
@@ -1725,11 +1724,11 @@ if st.session_state.section == 6:
         if st.button("Submit"):
             # Prepare data for the Word document
             document_data = {
-                'date': st.session_state.formatted_date,
+                'date': date,
                 'time': st.session_state.formatted_time,
                 'option': st.session_state.option,
-                'completed_by': st.session_state.completed_by,
-                'room_number': st.session_state.room_number,
+                'completed_by': form_completed_by,
+                'room_number': room_number,
                 'difficult_airway_history': st.session_state.difficult_airway_history,
                 'physical_risk': st.session_state.physical_risk,
                 'high_risk_desaturation': st.session_state.high_risk_desaturation,
@@ -1770,17 +1769,12 @@ if st.session_state.section == 6:
                 st.session_state.doc_file = create_word_doc(template_path, document_data)
                 st.success("Document created successfully!")
 
-                # Upload data to Firebase for email
-                db = st.session_state.db  # Access the Firestore client from session state
-                email_data = {"form_completed_by": st.session_state.completed_by,
-                    "date": st.session_state.formatted_date,
-                    "room_number": st.session_state.room_number,
-                }
-                
-                db.collection("N4KFORMP").add(email_data)  # Add email data to the Firestore collection
-                st.success("Database data submitted successfully!")
+                # Define subject and message for email
+                subject = "Pink Form Submission"
+                message = f"Here is the Pink Form.<br><br>Room Number: {room_number}<br>Date: {date}<br>Form Completed By: {form_completed_by}"
 
                 # Send email with attachment
+                to_email = st.secrets["general"]["email_r"]  # Recipient email from secrets
                 send_email_with_attachment(to_email, subject, message, st.session_state.doc_file)
 
             except Exception as e:
@@ -1800,4 +1794,3 @@ if st.session_state.section == 6:
     with col1:
         if st.button("Previous", on_click=prev_section):
             pass
-

@@ -856,7 +856,7 @@ elif st.session_state.section == 2:
         st.write("History of difficult airway?")
     with cols[1]:
         #difficult_airway_history = st.selectbox("", options=['Select Risk Factor 1', 'YES', 'NO'])
-        difficult_airway_history = st.selectbox("", options=['Select Risk Factor 1', 'YES', 'NO'], index=['Select Risk Factor 1', 'YES', 'NO'].index(st.session_state.difficult_airway_history))
+        difficult_airway_history = st.selectbox("", options=['Select Risk Factor 1', 'YES', 'NO'], index=['Select Risk Factor 1', 'YES', 'NO'].index(st.session_state.get('difficult_airway_history', 'NO'))
 
     cols = st.columns([4, 1])
     with cols[0]:
@@ -963,13 +963,13 @@ elif st.session_state.section == 3:
     who_will_intubate = st.multiselect(
     "Who will intubate?", 
     options=['Resident', 'Fellow', 'NP', 'Attending', 'Anesthesiologist', 'ENT physician', 'RT'],
-    default=st.session_state.get('who_will_intubate', [])
+    default=st.session_state.get('who_will_intubate', ['Fellow','NP'])
     )
     
     who_will_bvm = st.multiselect(
         "Who will bag-mask?", 
         options=['Resident', 'Fellow', 'NP', 'Attending', 'RT'],
-        default=st.session_state.get('who_will_bvm', [])
+        default=st.session_state.get('who_will_bvm', ['Fellow','NP','RT'])
     )
 
 
@@ -1082,7 +1082,7 @@ elif st.session_state.section == 3:
       
         lma_details = list(set(lma_size_mapping.values()))  # Get unique ETT sizes
         lma_details = ["Select an LMA Size"] + lma_details
-        custom_order = ['LMA Size 1', 'LMA Size 1.5', 'LMA Size 2', 'LMA Size 2.5', 'LMA Size 3', 'LMA Size 4', 'LMA Size 5']
+        custom_order = ['LMA Size 0.5','LMA Size 1', 'LMA Size 1.5', 'LMA Size 2', 'LMA Size 2.5', 'LMA Size 3', 'LMA Size 4', 'LMA Size 5']
         lma_details = ["Select an LMA Size"] + [size for size in custom_order if size in lma_details]
         if 'lma_details' in st.session_state and st.session_state['lma_details'] in lma_details:
           lma_details = st.selectbox(
@@ -1631,8 +1631,8 @@ if st.session_state.section == 5:
 
     advance_airway_procedure = st.multiselect(
     "Difficult Airway Alert Procedure:", 
-    options = ['Difficult Airway Cart', 'Difficult Airway Emergency Page'],
-    default=st.session_state.get('advance_airway_procedure', [])
+    options = ['Difficult Airway Cart', 'Difficult Airway Emergency Page (Dial 8888)'],
+    default=st.session_state.get('advance_airway_procedure', ['Difficult Airway Emergency Page (Dial 8888)'])
     )
 
     # Single Next and Previous Buttons

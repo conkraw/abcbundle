@@ -960,9 +960,6 @@ elif st.session_state.section == 2:
 
 elif st.session_state.section == 3:
     st.title("Intubation Plan")
-  
-    if 'who_will_intubate' not in st.session_state:
-      st.session_state['who_will_intubate'] = ['Fellow', 'NP']
       
     who_will_intubate = st.multiselect("Who will intubate?", options=['Resident', 'Fellow', 'NP', 'Attending', 'Anesthesiologist', 'ENT physician', 'RT'],default=st.session_state['who_will_intubate'])
       

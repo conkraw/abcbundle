@@ -964,7 +964,7 @@ elif st.session_state.section == 3:
     who_will_intubate = st.multiselect(
     "Who will intubate?", 
     options=['Resident', 'Fellow', 'NP', 'Attending', 'Anesthesiologist', 'ENT physician', 'RT'],
-    default=st.session_state.get('who_will_intubate', ['Fellow','NP'])
+    default=st.session_state['who_will_intubate']
     )
     
     who_will_bvm = st.multiselect(

@@ -630,8 +630,8 @@ default_values = {
 'ao_details': None, 
 'other_planning': "",
 'when_intubate': [],
-'advance_airway_provider': [],
-'advance_airway_procedure': [],
+'advance_airway_provider': ['Attending'],
+'advance_airway_procedure': ['Difficult Airway Emergency Page (Dial 8888)'],
 }
 
 # Initialize session state variables if not already set

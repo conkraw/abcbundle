@@ -966,8 +966,8 @@ elif st.session_state.section == 3:
     options=['Resident', 'Fellow', 'NP', 'Attending', 'Anesthesiologist', 'ENT physician', 'RT'],
     default=['Fellow', 'NP']
     )
-
-  st.session_state['who_will_intubate'] = who_will_intubate
+  
+st.session_state['who_will_intubate'] = who_will_intubate
 
   if 'who_will_bvm' not in st.session_state:
       st.session_state['who_will_bvm'] = ['Fellow', 'NP']
@@ -978,7 +978,7 @@ elif st.session_state.section == 3:
         default=['Fellow', 'NP'])
     )
 
-  t.session_state['who_will_bvm'] = who_will_bvm
+st.session_state['who_will_bvm'] = who_will_bvm
 
     # Create a layout for intubation method
     #intubation_method = st.selectbox("How will we intubate? (Method)", ["Intubation Method", "Oral", "Nasal"].index(st.session_state.intubation_method))

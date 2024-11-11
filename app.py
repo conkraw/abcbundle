@@ -959,14 +959,10 @@ elif st.session_state.section == 2:
 
 elif st.session_state.section == 3:
     st.title("Intubation Plan")
-      
-    st.write("Session state (who_will_intubate):", st.session_state['who_will_intubate'])
     
     who_will_intubate = st.multiselect("Who will intubate?", options=['Resident', 'Fellow', 'NP', 'Attending', 'Anesthesiologist', 'ENT physician', 'RT'],default=st.session_state['who_will_intubate'])
       
     st.session_state['who_will_intubate'] = who_will_intubate
-
-    st.write("Current selection:", who_will_intubate)
       
     who_will_bvm = st.multiselect("Who will bag-mask?", options=['Resident', 'Fellow', 'NP', 'Attending', 'RT'],default=st.session_state['who_will_bvm'])
   
@@ -1653,7 +1649,11 @@ if st.session_state.section == 5:
                 st.rerun()  # Force a rerun to reflect changes immediately
             else:
                 st.warning("Please select an option.")
-
+              
+def clear_file_after_download():
+    # Clear the file from session state
+    st.session_state.doc_file = None
+  
 # Function to send email with attachment
 def send_email_with_attachment(to_emails, subject, body, file_path):
     from_email = st.secrets["general"]["email"]
@@ -1814,6 +1814,9 @@ if st.session_state.section == 6:
                     file_name=st.session_state.doc_file.split("/")[-1],
                     mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
                 )
+              if download_button:
+                clear_file_after_download()
+                st.write("File has been downloaded and session state is cleared.")
 
     with col1:
         if st.button("Previous", on_click=prev_section):

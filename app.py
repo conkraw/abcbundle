@@ -606,7 +606,7 @@ default_values = {
     'high_risk_desaturation': 'NO',
     'high_risk_ICP': 'NO',
     'unstable_hemodynamics': 'NO',
-    'other_risk_yes_no': 'NO',
+    'other_risk_yes_no': 'Select Risk Factor 6',
     'other_risk_text_input': '',
     'who_will_intubate': ['Fellow','NP'],  # Change to list if needed
     'who_will_bvm': ['Fellow','NP'],       # Change to list if needed

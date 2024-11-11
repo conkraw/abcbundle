@@ -961,12 +961,10 @@ elif st.session_state.section == 3:
     if 'who_will_intubate' not in st.session_state:
       st.session_state['who_will_intubate'] = ['Fellow', 'NP']
 
-    st.write("Current session state (who_will_intubate):", st.session_state['who_will_intubate'])
-
     who_will_intubate = st.multiselect(
     "Who will intubate?", 
     options=['Resident', 'Fellow', 'NP', 'Attending', 'Anesthesiologist', 'ENT physician', 'RT'],
-    default=st.session_state['who_will_intubate']
+    default=['Fellow', 'NP']
     )
     
     who_will_bvm = st.multiselect(

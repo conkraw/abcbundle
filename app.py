@@ -1814,9 +1814,9 @@ if st.session_state.section == 6:
                     file_name=st.session_state.doc_file.split("/")[-1],
                     mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
                 )
-              if download_button:
-                clear_file_after_download()
-                st.write("File has been downloaded and session state is cleared.")
+            if download_button:
+              clear_file_after_download()
+              st.write("File has been downloaded and session state is cleared.")
 
     with col1:
         if st.button("Previous", on_click=prev_section):

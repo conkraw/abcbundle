@@ -968,10 +968,7 @@ elif st.session_state.section == 3:
 
     st.write("Current selection:", who_will_intubate)
       
-    if 'who_will_bvm' not in st.session_state:
-      st.session_state['who_will_bvm'] = ['Fellow', 'NP']
-      
-    who_will_bvm = st.multiselect("Who will bag-mask?", options=['Resident', 'Fellow', 'NP', 'Attending', 'RT'],default=['Fellow', 'NP'])
+    who_will_bvm = st.multiselect("Who will bag-mask?", options=['Resident', 'Fellow', 'NP', 'Attending', 'RT'],default=st.session_state['who_will_bvm'])
   
     st.session_state['who_will_bvm'] = who_will_bvm
 

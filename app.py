@@ -1076,8 +1076,8 @@ elif st.session_state.section == 3:
         #st.text_input("", key="laryngoscope_details", disabled=False)
       
         lma_details = list(set(lma_size_mapping.values()))  # Get unique ETT sizes
-        lma_details = ["Select an LMA Size"] + lma_details
-        custom_order = ['LMA Size 1', 'LMA Size 1.5', 'LMA Size 2', 'LMA Size 2.5', 'LMA Size 3', 'LMA Size 4', 'LMA Size 5']
+        lma_details = ["Select an LMA Size"] + 'LMA Size 0.5' + lma_details
+        custom_order = ['LMA Size 0.5', 'LMA Size 1', 'LMA Size 1.5', 'LMA Size 2', 'LMA Size 2.5', 'LMA Size 3', 'LMA Size 4', 'LMA Size 5']
         lma_details = ["Select an LMA Size"] + [size for size in custom_order if size in lma_details]
         if 'lma_details' in st.session_state and st.session_state['lma_details'] in lma_details:
           lma_details = st.selectbox(

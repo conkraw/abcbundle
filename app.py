@@ -601,12 +601,12 @@ default_values = {
     'option': None,
     'completed_by': None,
     'room_number': None,
-    'difficult_airway_history': 'Select Risk Factor 1',
-    'physical_risk': 'Select Risk Factor 2',
-    'high_risk_desaturation': 'Select Risk Factor 3',
-    'high_risk_ICP': 'Select Risk Factor 4',
-    'unstable_hemodynamics': 'Select Risk Factor 5',
-    'other_risk_yes_no': 'Select Risk Factor 6',
+    'difficult_airway_history': 'NO',
+    'physical_risk': 'NO',
+    'high_risk_desaturation': 'NO',
+    'high_risk_ICP': 'NO',
+    'unstable_hemodynamics': 'NO',
+    'other_risk_yes_no': 'NO',
     'other_risk_text_input': '',
     'who_will_intubate': ['Fellow','NP'],  # Change to list if needed
     'who_will_bvm': ['Fellow','NP'],       # Change to list if needed

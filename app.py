@@ -957,27 +957,20 @@ elif st.session_state.section == 2:
 
 elif st.session_state.section == 3:
     st.title("Intubation Plan")
-
+  
     if 'who_will_intubate' not in st.session_state:
       st.session_state['who_will_intubate'] = ['Fellow', 'NP']
-
-    who_will_intubate = st.multiselect(
-    "Who will intubate?", 
-    options=['Resident', 'Fellow', 'NP', 'Attending', 'Anesthesiologist', 'ENT physician', 'RT'],
-    default=['Fellow', 'NP']
-    )
+      
+      who_will_intubate = st.multiselect("Who will intubate?", options=['Resident', 'Fellow', 'NP', 'Attending', 'Anesthesiologist', 'ENT physician', 'RT'],default=['Fellow', 'NP'])
+      
+      st.session_state['who_will_intubate'] = who_will_intubate
+      
+    if 'who_will_bvm' not in st.session_state:
+      st.session_state['who_will_bvm'] = ['Fellow', 'NP']
+      
+    who_will_bvm = st.multiselect("Who will bag-mask?", options=['Resident', 'Fellow', 'NP', 'Attending', 'RT'],default=['Fellow', 'NP'])
   
-st.session_state['who_will_intubate'] = who_will_intubate
-
-if 'who_will_bvm' not in st.session_state:
-  st.session_state['who_will_bvm'] = ['Fellow', 'NP']
-  
-who_will_bvm = st.multiselect(
-        "Who will bag-mask?", 
-        options=['Resident', 'Fellow', 'NP', 'Attending', 'RT'],
-        default=['Fellow', 'NP'])
-
-st.session_state['who_will_bvm'] = who_will_bvm
+    st.session_state['who_will_bvm'] = who_will_bvm
 
     # Create a layout for intubation method
     #intubation_method = st.selectbox("How will we intubate? (Method)", ["Intubation Method", "Oral", "Nasal"].index(st.session_state.intubation_method))

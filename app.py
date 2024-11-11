@@ -608,7 +608,7 @@ default_values = {
     'unstable_hemodynamics': 'Select Risk Factor 5',
     'other_risk_yes_no': 'Select Risk Factor 6',
     'other_risk_text_input': '',
-    'who_will_intubate': [],  # Change to list if needed
+    'who_will_intubate': ['Fellow','NP'],  # Change to list if needed
     'who_will_bvm': [],       # Change to list if needed
     'intubation_method': "Intubation Method",
     'ett_size': None,
@@ -959,9 +959,7 @@ elif st.session_state.section == 2:
 
 elif st.session_state.section == 3:
     st.title("Intubation Plan")
-  
-    if 'who_will_intubate' not in st.session_state:
-      st.session_state['who_will_intubate'] = ['Fellow', 'NP']
+      
     st.write("Session state (who_will_intubate):", st.session_state['who_will_intubate'])
     
     who_will_intubate = st.multiselect("Who will intubate?", options=['Resident', 'Fellow', 'NP', 'Attending', 'Anesthesiologist', 'ENT physician', 'RT'],default=st.session_state['who_will_intubate'])

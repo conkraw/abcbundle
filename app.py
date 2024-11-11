@@ -976,7 +976,6 @@ who_will_bvm = st.multiselect(
         "Who will bag-mask?", 
         options=['Resident', 'Fellow', 'NP', 'Attending', 'RT'],
         default=['Fellow', 'NP'])
-    )
 
 st.session_state['who_will_bvm'] = who_will_bvm
 

@@ -943,7 +943,10 @@ elif st.session_state.section == 2:
                 st.session_state.high_risk_ICP = high_risk_ICP
                 st.session_state.unstable_hemodynamics = unstable_hemodynamics
                 st.session_state.other_risk_yes_no = other_risk_yes_no
-                
+      
+                  
+                if 'who_will_intubate' not in st.session_state:
+                    st.session_state['who_will_intubate'] = ['Fellow', 'NP']
                 if other_risk_yes_no == 'YES':
                     st.session_state.other_risk_text_input = other_risk_text_input
                 else:
@@ -961,7 +964,7 @@ elif st.session_state.section == 3:
     if 'who_will_intubate' not in st.session_state:
       st.session_state['who_will_intubate'] = ['Fellow', 'NP']
       
-    who_will_intubate = st.multiselect("Who will intubate?", options=['Resident', 'Fellow', 'NP', 'Attending', 'Anesthesiologist', 'ENT physician', 'RT'],default=['Fellow', 'NP'])
+    who_will_intubate = st.multiselect("Who will intubate?", options=['Resident', 'Fellow', 'NP', 'Attending', 'Anesthesiologist', 'ENT physician', 'RT'],default=st.session_state['who_will_intubate'])
       
     st.session_state['who_will_intubate'] = who_will_intubate
       

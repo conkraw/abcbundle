@@ -1808,7 +1808,7 @@ if st.session_state.section == 6:
         # Show the download button if the document has been created
         if st.session_state.doc_file:
             with open(st.session_state.doc_file, 'rb') as f:
-                st.download_button(
+                download_button=st.download_button(
                     label="Download Word Document",
                     data=f,
                     file_name=st.session_state.doc_file.split("/")[-1],

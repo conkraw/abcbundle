@@ -1023,7 +1023,7 @@ elif st.session_state.section == 3:
         ett_sizes = list(set(age_to_ett_mapping.values()))  # Assuming age_to_ett_mapping is defined
         
         # Add a blank option (e.g., "Select an ETT Size" or "")
-        ett_sizes = ["Select an ETT Size"] + ett_sizes  # Prepend a "Select" option
+        ett_sizes = ["Select an ETT Size"] + ['2.5 mm'] + ['3.0 mm'] + ett_sizes  # Prepend a "Select" option
 
         custom_order = ["2.5 mm", "3.0 mm", "3.5 mm", "4.0 mm", "4.5 mm", "5.0 mm", "5.5 mm", "6.0 mm", "6.5 mm", "7.0 mm", "7.5 mm", "8.0 mm"] #new line
 
